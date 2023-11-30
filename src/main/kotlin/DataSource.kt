@@ -3,13 +3,18 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-private const val urlPrefix = "https://adventofcode.com/2022/day/"
+// specify the advent of code source
+private const val urlPrefix = "https://adventofcode.com/2023/day/"
 private const val urlSuffix = "/input"
+// cookie header for AOC website.
 private const val cookieHeaderKey = "cookie"
-
 // set this in your env settings based on the cookie from the website, so you can get your personal data.
-private const val cookieEnvVariable = "AOC2022-cookie"
+// set it in your Kotlin configuration for Main as AOC2023Cookie=session=<sessionID> and replace the sessionID variable
+private const val cookieEnvVariable = "AOC2023Cookie"
 
+/**
+ * Read and format the input to some extent. Basically we read the blob of data and format it into lines.
+ */
 class DataSource {
     companion object {
         private val cookie = System.getenv(cookieEnvVariable)

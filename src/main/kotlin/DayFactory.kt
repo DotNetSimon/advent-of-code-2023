@@ -1,21 +1,18 @@
+/**
+ * Responsible for instantiating the correct date class.
+ */
 class DayFactory {
     companion object {
         fun createDay(day: Int): Day {
-            return when(day) {
-                12 -> Day12()
-                13 -> Day13()
-                14 -> Day14()
-                15 -> Day15()
-                16 -> Day16()
-                17 -> Day17()
-                18 -> Day18()
-                else -> throw IllegalArgumentException("Day doesn't exist")
-            }
+            return Class.forName("Day$day")?.newInstance() as Day
         }
     }
 }
 
+/**
+ * All Days should extend this, so we can generate and call them on the fly.
+ */
 interface Day {
-    abstract fun puzzleA(data: List<String>): String
-    abstract fun puzzleB(data: List<String>): String
+    fun puzzleA(data: List<String>): String
+    fun puzzleB(data: List<String>): String
 }

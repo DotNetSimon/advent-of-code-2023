@@ -1,15 +1,22 @@
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-class Day14Test {
-    val day = DayFactory.createDay(14)
+/**
+ * For testing the code for correctness based on the example input in the explanation.
+ * Adjust the DAY, Data, and expected outputs.
+ */
+class Day1Test {
 
+    // day to test
+    val day = DayFactory.createDay(1)
+
+    // source data
     val data = """498,4 -> 498,6 -> 496,6
 503,4 -> 502,4 -> 502,9 -> 494,9
 """.trimIndent().split("\n").filterNot{it == ""}
 
-
-    val expected = """0 ......+...
+    // expected output puzzle A
+    val expected_puzzleA = """0 ......+...
 1 ..........
 2 ......o...
 3 .....ooo..
@@ -21,7 +28,8 @@ class Day14Test {
 9 #########.
 """
 
-    val expected2 = """............o............
+    // expected output puzzle B
+    val expected_puzzleB = """............o............
 ...........ooo...........
 ..........ooooo..........
 .........ooooooo.........
@@ -33,19 +41,21 @@ class Day14Test {
 ...ooo#########ooooooo...
 ..ooooo.......ooooooooo..
 #########################"""
+
+    // -------------------
+    // Should be no need to modify the part below
+    // -------------------
     @Test
     fun puzzleACorrect() {
         val actual = day.puzzleA(data)
         println(actual)
-        assertEquals(expected, actual)
+        assertEquals(expected_puzzleA, actual)
     }
 
     @Test
     fun puzzleBCorrect() {
         val actual = day.puzzleB(data)
         println(actual)
-        assertEquals(expected2, actual)
-
+        assertEquals(expected_puzzleB, actual)
     }
-
 }
