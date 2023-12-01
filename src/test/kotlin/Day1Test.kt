@@ -8,53 +8,42 @@ import org.junit.Test
 class Day1Test {
 
     // day to test
-    val day = DayFactory.createDay(1)
+    private val day = DayFactory.createDay(1)
 
     // source data
-    val data = """498,4 -> 498,6 -> 496,6
-503,4 -> 502,4 -> 502,9 -> 494,9
+    private val dataA = """1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet
 """.trimIndent().split("\n").filterNot{it == ""}
 
+    private val dataB = """two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen""".trimIndent().split("\n").filterNot{it == ""}
+
     // expected output puzzle A
-    val expected_puzzleA = """0 ......+...
-1 ..........
-2 ......o...
-3 .....ooo..
-4 ....#ooo##
-5 ...o#ooo#.
-6 ..###ooo#.
-7 ....oooo#.
-8 .o.ooooo#.
-9 #########.
-"""
+    private val expected_puzzleA = """142"""
 
     // expected output puzzle B
-    val expected_puzzleB = """............o............
-...........ooo...........
-..........ooooo..........
-.........ooooooo.........
-........oo#ooo##o........
-.......ooo#ooo#ooo.......
-......oo###ooo#oooo......
-.....oooo.oooo#ooooo.....
-....oooooooooo#oooooo....
-...ooo#########ooooooo...
-..ooooo.......ooooooooo..
-#########################"""
+    private val expected_puzzleB = """281"""
 
     // -------------------
     // Should be no need to modify the part below
     // -------------------
     @Test
     fun puzzleACorrect() {
-        val actual = day.puzzleA(data)
+        val actual = day.puzzleA(dataA)
         println(actual)
         assertEquals(expected_puzzleA, actual)
     }
 
     @Test
     fun puzzleBCorrect() {
-        val actual = day.puzzleB(data)
+        val actual = day.puzzleB(dataB)
         println(actual)
         assertEquals(expected_puzzleB, actual)
     }
