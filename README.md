@@ -5,5 +5,5 @@ Thanks to Sedna for letting me do this :) And I hope many colleagues will join a
 Up to day 20!!
 
 # Attributions:
-Thanks to the organizer of Advent of code: https://adventofcode.com/2022
+Thanks to the organizer of Advent of code: https://adventofcode.com
 Thanks to my colleagues and friends, always pushing me to improve :)
