@@ -16,5 +16,5 @@ AOC2023Cookie=session=<sessionID>
 - Run MainKt
 
 # Attributions:
-Thanks to the organizer of Advent of code: https://adventofcode.com/2022
+Thanks to the organizer of Advent of code: https://adventofcode.com
 Thanks to my colleagues and friends, always pushing me to improve :)
