@@ -1,9 +1,6 @@
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * Day 1 class, should solve the puzzle A and puzzle B for you.
- */
 class Day5 : Day {
 
     fun chunkByData(data: List<String>): List<List<String>> {
@@ -57,7 +54,7 @@ class Day5 : Day {
             for (seedRange in seeds) {
                 var startSeed = seedRange.start
                 while (startSeed < seedRange.end) {
-                    val useConversion = conversion.firstOrNull{ c -> startSeed < c.end}
+                    val useConversion = conversion.firstOrNull { c -> startSeed < c.end }
 
                     // no more useful conversions -> copy the seedrange and be done
                     if (useConversion == null || useConversion.start > seedRange.end) {
@@ -68,10 +65,10 @@ class Day5 : Day {
                     val newStartSeed = min(useConversion.end, seedRange.end)
                     val rangeStartSeed = max(seedRange.start, useConversion.start)
                     if (rangeStartSeed > startSeed) { // don't forget to add the first part of seedrange to results.
-                        results.add(SeedRange(startSeed, rangeStartSeed-1))
+                        results.add(SeedRange(startSeed, rangeStartSeed - 1))
                     }
 
-                    results.add(SeedRange(rangeStartSeed+useConversion.offset, newStartSeed+useConversion.offset))
+                    results.add(SeedRange(rangeStartSeed + useConversion.offset, newStartSeed + useConversion.offset))
                     startSeed = newStartSeed
                 }
             }
@@ -80,33 +77,25 @@ class Day5 : Day {
     }
 
     override fun puzzleA(data: List<String>): String {
-        val chunks = chunkByData(data)
-
-        val seeds = chunks[0][0].split(" ").drop(1).map { it.toLong() }
-
-        val maps = chunks.drop(1).map { AlmanacMap.createFrom(it) }
-
-        val result = seeds.map { seed ->
-            var current = seed
-            maps.forEach { conversion -> current = conversion.transform(current) }
-            current
+        return chunkByData(data).let { chunks ->
+            chunks[0][0].split(" ").drop(1).map { it.toLong() }
+                .map { seed ->
+                    chunks.drop(1).map { AlmanacMap.createFrom(it) }
+                        .fold(seed) { acc, conversion ->
+                            conversion.transform(acc)
+                        }
+                }.min().toString()
         }
-
-        return result.min().toString()
     }
 
     override fun puzzleB(data: List<String>): String {
-        val chunks = chunkByData(data)
-
-        val seeds = chunks[0][0].split(" ").drop(1).map { it.toLong() }.chunked(2)
-        var allSeeds = seeds.map { SeedRange(it[0], it[0] + it[1] - 1) }
-
-        val maps = chunks.drop(1).map { AlmanacMap.createFrom(it) }
-
-        for (map in maps) {
-            allSeeds = map.transform(allSeeds)
+        chunkByData(data).let { chunks ->
+            chunks[0][0].split(" ").drop(1).map { it.toLong() }.chunked(2).let { seeds ->
+                return chunks.drop(1).map { AlmanacMap.createFrom(it) }
+                    .fold(seeds.map { SeedRange(it[0], it[0] + it[1] - 1) })
+                    { acc, map -> map.transform(acc) }
+                    .minOf { it.start }.toString()
+            }
         }
-
-        return allSeeds.minOf { it.start }.toString()
     }
 }
