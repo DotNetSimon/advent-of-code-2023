@@ -7,7 +7,7 @@ import kotlin.system.measureTimeMillis
 fun main() {
 
     // --------- SET DAY AND PUZZLE AND RUN MAIN -----------
-    val day = 3
+    val day = 5
 //    val puzzle = "A"
     val puzzle ="B"
     // -----------------------------------------------------
