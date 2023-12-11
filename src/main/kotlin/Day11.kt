@@ -1,4 +1,3 @@
-import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -14,29 +13,57 @@ class Day11 : Day {
     private data class Galaxy(val id: Int, val point: Point) {
 
     }
-    override fun puzzleA(data: List<String>): String {
-        val universe = expandUniverse(data)
-        val galaxies = getGalaxies(universe)
-        val distances = getAllDistances(galaxies)
-        return distances.sum().toString()
-    }
 
-    private fun getAllDistances(galaxies: List<Day11.Galaxy>): List<Int> {
-        return galaxies.flatMapIndexed{ index, galaxy1 ->
-            galaxies.drop(index+1).map { galaxy2 ->
+
+    private fun getAllDistances(galaxies: List<Galaxy>): List<Int> {
+        return galaxies.flatMapIndexed { index, galaxy1 ->
+            galaxies.drop(index + 1).map { galaxy2 ->
                 galaxy1.point.manhattanDistance(galaxy2.point)
             }
         }
     }
 
+    private data class Drift(val galaxy1: Galaxy, val galaxy2: Galaxy, val oldDistance: Int, val newDistance: Int, val drift: Int)
+    private fun getAllDistances(galaxies: List<Galaxy>, rowsExpanding: List<Int>, colsExpanding: List<Int>): List<Drift> {
+        return galaxies.flatMapIndexed { index, galaxy1 ->
+            galaxies.drop(index + 1).map { galaxy2 ->
+                val distance = galaxy1.point.manhattanDistance(galaxy2.point)
+                val ydrift = rowsExpanding.count{it in min(galaxy1.point.Y, galaxy2.point.Y)..max(galaxy1.point.Y, galaxy2.point.Y)}
+                val xdrift = colsExpanding.count{it in min(galaxy1.point.X, galaxy2.point.X)..max(galaxy1.point.X, galaxy2.point.X)}
+                val EXPANSION_FACTOR = 1000000
+                var newDistance = distance - (ydrift + xdrift)
+                newDistance += ydrift * EXPANSION_FACTOR
+                newDistance += xdrift * EXPANSION_FACTOR
+                Drift(galaxy1, galaxy2, distance, newDistance, ydrift+xdrift)
+            }
+        }
+    }
     private fun getGalaxies(universe: List<String>): List<Galaxy> {
         var id = 0
-        return universe.flatMapIndexed{ y, line -> line.mapIndexed{ x, each -> if (each == '#') Galaxy(id++, Point(x,y)) else null}.filterNotNull()}
+        return universe.flatMapIndexed { y, line ->
+            line.mapIndexed { x, each ->
+                if (each == '#') Galaxy(
+                    id++,
+                    Point(x, y)
+                ) else null
+            }.filterNotNull()
+        }
     }
 
-    fun universeExpanding(data: List<String>) {
-
+    fun universeExpanding(data: List<String>): Pair<List<Int>, List<Int>> {
+        val rowsExpanding = mutableListOf<Int>()
+        val colsExpanding = mutableListOf<Int>()
+        data.forEachIndexed { index, line ->
+            if (line.all { it == '.' }) rowsExpanding.add(index)
+        }
+        for (x in 0 until data[0].length) {
+            if (allCharactersAtPosition(x, data).take(data.size).all { it == '.' }) {
+                colsExpanding.add(x)
+            }
+        }
+        return Pair(rowsExpanding, colsExpanding)
     }
+
     fun expandUniverse(data: List<String>): List<String> {
         var newData = mutableListOf<String>()
         data.forEach { line ->
@@ -45,8 +72,8 @@ class Day11 : Day {
         }
 
         var x = 0
-        while (x < newData[0].length-1) {
-            if (allCharactersAtPosition(x, newData).take(newData.size).all { it==newData[0][x] }) {
+        while (x < newData[0].length - 1) {
+            if (allCharactersAtPosition(x, newData).take(newData.size).all { it == newData[0][x] }) {
                 newData = addEmptyLineAt(x, newData)
                 x++ // skip one since we doubled this column.
             }
@@ -68,9 +95,18 @@ class Day11 : Day {
         }
     }
 
+    override fun puzzleA(data: List<String>): String {
+        val universe = expandUniverse(data)
+        val galaxies = getGalaxies(universe)
+        val distances = getAllDistances(galaxies)
+        return distances.sum().toString()
+    }
 
     override fun puzzleB(data: List<String>): String {
-        return "o"
+        val (rowsExpanding, colsExpanding) = universeExpanding(data)
+        val galaxies = getGalaxies(data)
+        val distances = getAllDistances(galaxies, rowsExpanding, colsExpanding)
+        return distances.map{it.newDistance.toLong()}.sum().toString()
     }
 
 

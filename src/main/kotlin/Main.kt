@@ -8,8 +8,8 @@ fun main() {
 
     // --------- SET DAY AND PUZZLE AND RUN MAIN -----------
     val day = 11
-    val puzzle = "A"
-//    val puzzle ="B"
+//    val puzzle = "A"
+    val puzzle ="B"
     // -----------------------------------------------------
 
     println("Advent of code: Day $day")
